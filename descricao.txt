@@ -1,0 +1,25 @@
+Projeto de Análise de Dados e Upload no BigQuery 
+
+Objetivo: Realizar uma análise exploratória de uma base de dados à sua escolha, identificar possíveis problemas e gerar insights. 
+Dependendo do tipo de problema que você identificar, poderá aplicar um modelo preditivo, como redes neurais ou regressão linear. 
+Ao final do projeto, a base de dados deve ser preparada para upload no BigQuery e todo o processo deve ser versionado no GitHub. 
+
+Requisitos: Análise Exploratória de Dados (EDA): Realize uma análise exploratória completa da base de dados. 
+Identifique possíveis problemas, como dados faltantes, outliers, ou inconsistências. Gere insights iniciais a partir da exploração dos dados (distribuições, correlações, etc.). 
+
+Modelagem Preditiva (Opcional): Se a natureza do problema permitir, escolha e implemente um modelo preditivo. 
+
+Exemplo de abordagens: 
+    - Redes neurais: caso o problema seja adequado para uma abordagem mais complexa. 
+    - Regressão linear: caso a relação entre variáveis seja simples e linear. Justifique a escolha do modelo e avalie seu desempenho. 
+
+Upload da Base no BigQuery: Prepare a base de dados para upload no BigQuery. Garanta que seu projeto possa realizar o upload da base de dados automaticamente para o BigQuery, utilizando as credenciais e a autenticação Google adequadas. 
+
+Versionamento no GitHub: O projeto completo deve ser versionado no GitHub e conter: Todo o código necessário para a análise exploratória e modelagem. 
+Um README.md explicando como configurar o ambiente para rodar o projeto em qualquer máquina. Instruções claras para a configuração da autenticação necessária para o upload no BigQuery. 
+O script para o upload da base no BigQuery, utilizando as APIs e autenticação do Google. 
+
+Compatibilidade: O projeto deve ser executável em qualquer máquina (Windows, Mac, Linux), e todas as dependências devem ser documentadas no README.md. 
+Inclua um arquivo requirements.txt ou environment.yml (caso utilize Conda) listando todas as bibliotecas e dependências necessárias. 
+
+Entrega: Submeta o link do repositório GitHub com o projeto completo. Certifique-se de que todos os passos estão bem documentados, incluindo como realizar a autenticação com a API do Google para o BigQuery.
