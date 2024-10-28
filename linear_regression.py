@@ -11,11 +11,15 @@ with open('Incendios.csv', 'r') as file:
 df.columns = ['Ano', 'Estado', 'Mês', 'Número']
 
 df['Estado'] = df['Estado'].astype(str)
+df['Estado'] = df['Estado'].replace('ParÃ¡', 'Pará')
 
 label_encoder = LabelEncoder()
 df['Estado'] = label_encoder.fit_transform(df['Estado'])
 
-X = df[['Ano', 'Estado']]
+df['Media_dos_anos_anteriores'] = df.groupby('Estado')['Número'].transform(lambda x: x.shift().expanding().mean())
+df = df.dropna(subset = ['Media_dos_anos_anteriores'])
+
+X = df[['Ano', 'Estado', 'Media_dos_anos_anteriores']]
 y = df['Número']
 
 scaler = StandardScaler()
@@ -23,8 +27,8 @@ X = scaler.fit_transform(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X, 
                                                     y, 
-                                                    test_size=0.2, 
-                                                    random_state=42)
+                                                    test_size = 0.2, 
+                                                    random_state = 42)
 
 modelo_regressao = LinearRegression()
 modelo_regressao.fit(X_train, y_train)
@@ -32,14 +36,26 @@ modelo_regressao.fit(X_train, y_train)
 y_pred_regressao = modelo_regressao.predict(X_test)
 
 mae_regressao = mean_absolute_error(y_test, y_pred_regressao)
+mse_regressao = mean_squared_error(y_test, y_pred_regressao)
 rmse_regressao = np.sqrt(mean_squared_error(y_test, y_pred_regressao))
 
-print("Regressão Linear - Mean Absolute Error:", mae_regressao, "\nRMSE:", rmse_regressao)
+print("Regressão Linear - MAE:", int(mae_regressao), "\nRMSE:", int(rmse_regressao))
+print("MSE:", int(mse_regressao), ".\n")
 
-ano_novo = 2024
-estado_novo = 'Acre'
-estado_novo_codificado = label_encoder.transform([estado_novo])[0]
-X_novo = scaler.transform([[ano_novo, estado_novo_codificado]])
-previsao = modelo_regressao.predict(X_novo)
+ano = 2024
+estados = ['Acre', 'Pará', 'Distrito Federal', 'Bahia']
 
-print(f"Previsão do número de incêndios em {estado_novo} para o ano {ano_novo}: {previsao[0]}.")
+for estado in estados:
+    estado_codificado = label_encoder.transform([estado])[0]
+
+    media_anos_anteriores = df[(df['Ano'] < ano) & (df['Estado'] == estado_codificado)]['Número'].mean()
+    
+    if np.isnan(media_anos_anteriores):
+        print(f"Dados insuficientes para calcular média histórica para {estado}.")
+        continue
+
+    novo = np.array([[ano, estado_codificado, media_anos_anteriores]])
+    novo = scaler.transform(novo)
+    previsao = modelo_regressao.predict(novo)
+    
+    print(f"Previsão do número de incêndios em {estado} para o ano {ano}: {int(previsao[0])}.")
